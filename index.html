@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cut Calculator</title>
+</head>
+<body>
+    <h1>Cut Calculator</h1>
+    <form id="cutForm">
+        <label for="numCuts">Number of Cuts:</label>
+        <input type="number" id="numCuts" name="numCuts" required>
+        <br>
+        <label for="headMeasurement">Head Measurement:</label>
+        <input type="text" id="headMeasurement" name="headMeasurement" required>
+        <br>
+        <label for="finishedWidth">Finished Width:</label>
+        <input type="text" id="finishedWidth" name="finishedWidth" required>
+        <br>
+        <button type="submit">Calculate</button>
+    </form>
+    <div id="result">
+        <!-- Result will be displayed here -->
+    </div>
+
+    <script>
+        // Function to perform the calculation
+        function calculateCuts(numCuts, headMeasurement, finishedWidth) {
+            let result = "";
+            headMeasurement = parseFloat(headMeasurement);
+            finishedWidth = parseFloat(finishedWidth);
+
+            if (numCuts === 1) {
+                result += (headMeasurement - 5.375).toFixed(2);
+            } else if (numCuts === 2) {
+                result += (headMeasurement - 5.375 + finishedWidth).toFixed(2) + "<br>" +
+                          (headMeasurement - 5).toFixed(2);
+            } else if (numCuts === 3) {
+                result += (headMeasurement - 5.375).toFixed(2) + "<br>" +
+                          (headMeasurement - 5.375 + 2 * finishedWidth).toFixed(2) + "<br>" +
+                          (headMeasurement - 5 + finishedWidth).toFixed(2);
+            } else if (numCuts >= 4 && numCuts <= 13) {
+                result += (headMeasurement - 5.375).toFixed(2) + "<br>";
+                for (let i = 2; i <= numCuts; i++) {
+                    if (i % 2 === 0) {
+                        result += (headMeasurement - 5.375 + (i / 2) * finishedWidth).toFixed(2) + "<br>";
+                    } else {
+                        result += (headMeasurement - 5 + ((i - 1) / 2) * finishedWidth).toFixed(2) + "<br>";
+                    }
+                }
+            }
+            return result;
+        }
+
+        // Get reference to the form
+        const form = document.getElementById('cutForm');
+
+        // Add event listener to form submission
+        form.addEventListener('submit', function(event) {
+            // Prevent default form submission
+            event.preventDefault();
+
+            // Get form values
+            const numCuts = parseInt(document.getElementById('numCuts').value);
+            const headMeasurement = document.getElementById('headMeasurement').value;
+            const finishedWidth = document.getElementById('finishedWidth').value;
+
+            // Calculate result
+            const result = calculateCuts(numCuts, headMeasurement, finishedWidth);
+
+            // Display result
+            document.getElementById('result').innerHTML = result;
+        });
+    </script>
+</body>
+</html>
